@@ -12,6 +12,7 @@ class ViewController: UIViewController {
 
     var previousValue = 0
     var currentValue = 0
+    var sign = 1
     
     var plusInProgress = false
     var minusInProgress = false
@@ -42,7 +43,9 @@ class ViewController: UIViewController {
         refresh()
     }
     @IBAction func button2_clicked(_ sender: Any) {
-        currentValue = currentValue * 10 + 2
+        currentValue = sign * (currentValue * 10 + 2)
+        //vernut sign v iznacalnoje znacenije po pouziti
+        // plus derzat sign spravny -8, -88, -888
         if minusInProgress && previousValue == 0 {
             currentValue = previousValue - currentValue
         }
@@ -57,7 +60,7 @@ class ViewController: UIViewController {
     }
     @IBAction func button4_clicked(_ sender: Any) {
 
-        currentValue = currentValue * 10 + 4
+        currentValue = sign * currentValue * 10 + 4
         if minusInProgress && previousValue == 0 {
             currentValue = previousValue - currentValue
         }
@@ -104,7 +107,10 @@ class ViewController: UIViewController {
             currentValue = previousValue - currentValue
         }
         refresh()
-    }    
+    }
+    @IBAction func buttonNegative_clicked(_ sender: Any) {
+        sign = sign * -1
+    }
     @IBAction func buttonMinus_clicked(_ sender: Any) {
         if plusInProgress {
             buttonPlus_clicked((Any).self)
@@ -129,6 +135,7 @@ class ViewController: UIViewController {
         previousValue = previousValue - currentValue
         currentValue = 0
         refreshResult()
+        
     }
     
     @IBAction func buttonPlus_clicked(_ sender: Any) {
@@ -166,9 +173,15 @@ class ViewController: UIViewController {
             currentValue = 0
             refreshResult()
         } else if multInProgress {
-            previousValue = currentValue * previousValue
-            currentValue = 0
-            refreshResult()
+            if previousValue < 0 || currentValue < 0 {
+                previousValue = currentValue * previousValue
+                currentValue = 0
+                refreshResult()
+            }// if previousValue >= 0 && currentValue >= 0 {
+               // previousValue = currentValue * previousValue
+               // currentValue = 0
+               // refreshResult()
+            //}
         }
         multInProgress = true
         //plusInProgress = false
