@@ -41,11 +41,18 @@ class ViewController: UIViewController {
             currentValue = previousValue - currentValue
         }
         refresh()
+        
+        /*if currentValue >= 0 {
+            currentValue = sign * (currentValue * 10 + 1)
+        } else if currentValue < 0 {
+        currentValue = sign * (currentValue * 10 - 1)
+        } else if minusInProgress && previousValue == 0 {
+            currentValue = previousValue - currentValue
+        }
+        sign = 1*/
     }
     @IBAction func button2_clicked(_ sender: Any) {
-        currentValue = sign * (currentValue * 10 + 2)
-        //vernut sign v iznacalnoje znacenije po pouziti
-        // plus derzat sign spravny -8, -88, -888
+        currentValue = currentValue * 10 + 2
         if minusInProgress && previousValue == 0 {
             currentValue = previousValue - currentValue
         }
@@ -59,8 +66,7 @@ class ViewController: UIViewController {
         refresh()
     }
     @IBAction func button4_clicked(_ sender: Any) {
-
-        currentValue = sign * currentValue * 10 + 4
+        currentValue = currentValue * 10 + 4
         if minusInProgress && previousValue == 0 {
             currentValue = previousValue - currentValue
         }
@@ -109,7 +115,9 @@ class ViewController: UIViewController {
         refresh()
     }
     @IBAction func buttonNegative_clicked(_ sender: Any) {
-        sign = sign * -1
+        //sign = sign * -1
+        currentValue = currentValue * -1
+        refresh()
     }
     @IBAction func buttonMinus_clicked(_ sender: Any) {
         if plusInProgress {
@@ -168,47 +176,37 @@ class ViewController: UIViewController {
         } else if minusInProgress {
             buttonMinus_clicked((Any).self)
             minusInProgress = false
-        } else if multInProgress == false {
+        } else if multInProgress == false && previousValue == 0 {
             previousValue = currentValue
             currentValue = 0
-            refreshResult()
         } else if multInProgress {
-            if previousValue < 0 || currentValue < 0 {
-                previousValue = currentValue * previousValue
-                currentValue = 0
-                refreshResult()
-            }// if previousValue >= 0 && currentValue >= 0 {
-               // previousValue = currentValue * previousValue
-               // currentValue = 0
-               // refreshResult()
-            //}
-        }
-        multInProgress = true
-        //plusInProgress = false
-        //minusInProgress = false
-        //divideInProgress = false
-        
-        /*if currentValue == 0 {
-            currentValue = 0
-            previousValue = 0
-            refresh()
-        } else
-        if currentValue != 0 && previousValue == 0 {
-            previousValue = currentValue
-            currentValue = 0
-            refreshResult()
-        }
- else if currentValue != 0 && previousValue != 0 {
             previousValue = currentValue * previousValue
             currentValue = 0
-            refreshResult()
-        }*/
-        
+        }
+        multInProgress = true
+        refreshResult()
         
     }
     
     @IBAction func buttonDivide_clicked(_ sender: Any) {
-
+        if minusInProgress {
+            buttonMinus_clicked((Any).self)
+            minusInProgress = false
+        } else if multInProgress {
+            buttonMult_clicked((Any).self)
+            multInProgress = false
+        } else if plusInProgress {
+            buttonDivide_clicked((Any).self)
+            plusInProgress = false
+        } else if divideInProgress == false && previousValue == 0 {
+            previousValue = currentValue
+            currentValue = 0
+        } else if divideInProgress {
+            previousValue = previousValue / currentValue
+            currentValue = 0
+        }
+        divideInProgress = true
+        refreshResult()
     }
     
     @IBAction func buttonEval_clicked(_ sender: Any) {
@@ -216,8 +214,11 @@ class ViewController: UIViewController {
             currentValue = previousValue + currentValue
         } else if minusInProgress {
             currentValue = previousValue - currentValue
+        } else if multInProgress {
+            currentValue = previousValue * currentValue
+        } else if divideInProgress {
+            currentValue = previousValue / currentValue
         }
-        
         refresh()
     }
     @IBAction func buttonReset_clicked(_ sender: Any) {
