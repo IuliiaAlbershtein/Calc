@@ -201,25 +201,38 @@ class ViewController: UIViewController {
         } else if divideInProgress == false && previousValue == 0 {
             previousValue = currentValue
             currentValue = 0
-        } else if divideInProgress {
+            refreshResult()
+        }
+        if divideInProgress && currentValue == 0 {
+            resultLabel.text = "Error"
+        }
+        else if divideInProgress {
             previousValue = previousValue / currentValue
             currentValue = 0
+            refreshResult()
         }
         divideInProgress = true
-        refreshResult()
     }
     
     @IBAction func buttonEval_clicked(_ sender: Any) {
         if plusInProgress {
-            currentValue = previousValue + currentValue
+            previousValue = previousValue + currentValue
+            currentValue = 0
+            plusInProgress = false
         } else if minusInProgress {
-            currentValue = previousValue - currentValue
+            previousValue = previousValue - currentValue
+            currentValue = 0
+            minusInProgress = false
         } else if multInProgress {
-            currentValue = previousValue * currentValue
+            previousValue = previousValue * currentValue
+            currentValue = 0
+            multInProgress = false
         } else if divideInProgress {
-            currentValue = previousValue / currentValue
+            previousValue = previousValue / currentValue
+            currentValue = 0
+            divideInProgress = false
         }
-        refresh()
+        refreshResult()
     }
     @IBAction func buttonReset_clicked(_ sender: Any) {
         currentValue = 0
