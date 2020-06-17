@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     var previousValue = 0.0
     var currentValue = 0.0
-    var sign = 1
+    var dot = 0
     
     var plusInProgress = false
     var minusInProgress = false
@@ -34,6 +34,9 @@ class ViewController: UIViewController {
         if previousValue.rounded(.up) == previousValue.rounded(.down) {
             let previousResult = Int(previousValue)
             resultLabel.text = "\(previousResult)"
+            if dot == 1 {
+                resultLabel.text = "\(previousResult)."
+            }
         } else {
             resultLabel.text = "\(previousValue)"
         }
@@ -43,6 +46,9 @@ class ViewController: UIViewController {
         if currentValue.rounded(.up) == currentValue.rounded(.down) {
             let currentResult = Int(currentValue)
             resultLabel.text = "\(currentResult)"
+            if dot == 1 {
+                resultLabel.text = "\(currentResult)."
+            }
         } else {
             resultLabel.text = "\(currentValue)"
         }
@@ -113,6 +119,10 @@ class ViewController: UIViewController {
         if minusInProgress && previousValue == 0 {
             currentValue = previousValue - currentValue
         }
+        // jestli chci nejen 0.8 ale i 0.88 atd
+        if dot == 1 {
+            currentValue = currentValue * 0.1
+        }
         refresh()
     }
     @IBAction func button9_clicked(_ sender: Any) {
@@ -132,6 +142,12 @@ class ViewController: UIViewController {
     @IBAction func buttonNegative_clicked(_ sender: Any) {
         //sign = sign * -1
         currentValue = currentValue * -1
+        refresh()
+    }
+    @IBAction func buttonComa_clicked(_ sender: Any) {
+        if dot == 1 {
+        }
+        dot = 1
         refresh()
     }
     @IBAction func buttonMinus_clicked(_ sender: Any) {
@@ -157,6 +173,7 @@ class ViewController: UIViewController {
         }
         previousValue = previousValue - currentValue
         currentValue = 0
+        dot = 0
         refreshResult()
         
     }
@@ -178,6 +195,7 @@ class ViewController: UIViewController {
         //divideInProgress = false
         previousValue = currentValue + previousValue
         currentValue = 0
+        dot = 0
         refreshResult()
     }
     
@@ -199,6 +217,7 @@ class ViewController: UIViewController {
             currentValue = 0
         }
         multInProgress = true
+        dot = 0
         refreshResult()
         
     }
@@ -231,6 +250,7 @@ class ViewController: UIViewController {
             resultLabel.text = "\(previousDecimal)"
             previousValue = Int(previousDecimal)
         }*/
+        dot = 0
         divideInProgress = true
     }
     
@@ -252,11 +272,13 @@ class ViewController: UIViewController {
             currentValue = 0
             divideInProgress = false
         }
+        dot = 0
         refreshResult()
     }
     @IBAction func buttonReset_clicked(_ sender: Any) {
         currentValue = 0
         previousValue = 0
+        dot = 0
         
         plusInProgress = false
         minusInProgress = false
