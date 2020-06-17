@@ -10,8 +10,8 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var previousValue = 0
-    var currentValue = 0
+    var previousValue = 0.0
+    var currentValue = 0.0
     var sign = 1
     
     var plusInProgress = false
@@ -25,12 +25,27 @@ class ViewController: UIViewController {
         refresh()
     }
     
-    private func refresh() {
-        resultLabel.text = "\(currentValue)"
-    }
+   // private func refresh() {
+       // let currentDecimal = Double(currentValue)
+     //   resultLabel.text = "\(currentValue)"
+    //}
     
     private func refreshResult() {
-        resultLabel.text = "\(previousValue)"
+        if previousValue.rounded(.up) == previousValue.rounded(.down) {
+            let previousResult = Int(previousValue)
+            resultLabel.text = "\(previousResult)"
+        } else {
+            resultLabel.text = "\(previousValue)"
+        }
+        //resultLabel.text = "\(previousValue)"
+    }
+    private func refresh() {
+        if currentValue.rounded(.up) == currentValue.rounded(.down) {
+            let currentResult = Int(currentValue)
+            resultLabel.text = "\(currentResult)"
+        } else {
+            resultLabel.text = "\(currentValue)"
+        }
     }
     
     @IBOutlet weak var resultLabel: UILabel!
@@ -210,7 +225,12 @@ class ViewController: UIViewController {
             previousValue = previousValue / currentValue
             currentValue = 0
             refreshResult()
-        }
+        } /*else if divideInProgress && previousValue % currentValue != 0 {
+            let previousDecimal = Double(previousValue) / Double(currentValue)
+            currentValue = 0
+            resultLabel.text = "\(previousDecimal)"
+            previousValue = Int(previousDecimal)
+        }*/
         divideInProgress = true
     }
     
